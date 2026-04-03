@@ -1,0 +1,26 @@
+{
+    "name": "backend",
+    "version": "2.0.0",
+    "description": "Legal Case Reasoning Explorer – Phase 2 Backend",
+    "main": "server.js",
+    "scripts": {
+        "start": "node server.js",
+        "dev": "node server.js",
+        "test": "echo \"No tests yet\" && exit 0"
+    },
+    "keywords": [
+        "legal",
+        "nlp",
+        "reasoning",
+        "graph"
+    ],
+    "author": "Kanishk Sigar",
+    "license": "ISC",
+    "dependencies": {
+        "body-parser": "^1.20.2",
+        "compromise": "^14.10.0",
+        "cors": "^2.8.5",
+        "express": "^4.19.2",
+        "jsonwebtoken": "^9.0.3"
+    }
+}
