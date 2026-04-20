@@ -2,7 +2,9 @@ import { useState } from 'react';
 import InputSection      from './components/InputSection';
 import ResultSection     from './components/ResultSection';
 import GraphVisualizer   from './components/GraphVisualizer';
+import ChatBot           from './components/ChatBot';
 import { processText }   from './services/api';
+
 
 function MainApp() {
     // ── Core state ──────────────────────────────────────
@@ -29,6 +31,7 @@ function MainApp() {
 
     return (
         <div className="app-layout">
+            <ChatBot judgmentText={inputText} graphData={graphData} />
             {/* ── Header ── */}
             <header className="app-header">
                 <div className="header-brand">

@@ -19,3 +19,20 @@ export const verifyToken = async (token: string) => {
     });
     return response.data;
 };
+
+export const sendChatMessage = async (
+    messages: { role: 'user' | 'assistant'; content: string }[],
+    context?: { judgmentText?: string; graphData?: any }
+) => {
+    const response = await axios.post(`${API_URL}/chat`, { messages, context });
+    return response.data;
+};
+
+export const uploadPDF = async (file: File) => {
+    const formData = new FormData();
+    formData.append('pdf', file);
+    const response = await axios.post(`${API_URL}/upload-pdf`, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+    });
+    return response.data;
+};

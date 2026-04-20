@@ -1,8 +1,11 @@
+require('dotenv').config();
 const express       = require('express');
 const cors          = require('cors');
 const bodyParser    = require('body-parser');
 const jwt           = require('jsonwebtoken');
 const processRoutes = require('./routes/process');
+const chatRoutes    = require('./routes/chat');
+const uploadRoutes  = require('./routes/upload');
 
 const app  = express();
 const PORT = 5000;
@@ -12,6 +15,12 @@ app.use(bodyParser.json({ limit: '5mb' }));
 
 // Phase 1 routes (Text Processing)
 app.use('/api/process', processRoutes);
+
+// Chat (Lex AI assistant)
+app.use('/api/chat', chatRoutes);
+
+// PDF upload & text extraction
+app.use('/api/upload-pdf', uploadRoutes);
 
 // Simple JWT Auth
 const JWT_SECRET = process.env.JWT_SECRET || 'ethereal_archive_secret_key_123';

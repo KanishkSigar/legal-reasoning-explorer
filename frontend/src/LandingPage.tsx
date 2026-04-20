@@ -8,7 +8,7 @@ const LandingPage: React.FC = () => {
     const [email, setEmail] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
-    
+
     // UI State
     const [activeTab, setActiveTab] = useState(0);
     const navigate = useNavigate();
@@ -122,7 +122,7 @@ const LandingPage: React.FC = () => {
                     textTransform: 'uppercase',
                     letterSpacing: '0.05em'
                 }}>New Release Available</div>
-                
+
                 <h1 style={{
                     fontSize: '5rem',
                     fontWeight: 700,
@@ -131,9 +131,9 @@ const LandingPage: React.FC = () => {
                     maxWidth: '1000px',
                     margin: 0
                 }}>
-                    Agentic Legal applications <br/>for the enterprise
+                    Visualizing Legal Reasoning  <br />Through Interactive Graphs
                 </h1>
-                
+
                 <p style={{
                     fontSize: '1.25rem',
                     color: '#1f6870',
@@ -383,8 +383,8 @@ const LandingPage: React.FC = () => {
                                     opacity: loading ? 0.8 : 1,
                                     transition: 'background 0.2s, box-shadow 0.2s'
                                 }}
-                                onMouseOver={(e) => { if(!loading) { e.currentTarget.style.background = '#004aa3'; e.currentTarget.style.boxShadow = '0 8px 20px rgba(0, 92, 193, 0.25)' } }}
-                                onMouseOut={(e) => { if(!loading) { e.currentTarget.style.background = '#005cc1'; e.currentTarget.style.boxShadow = 'none' } }}
+                                onMouseOver={(e) => { if (!loading) { e.currentTarget.style.background = '#004aa3'; e.currentTarget.style.boxShadow = '0 8px 20px rgba(0, 92, 193, 0.25)' } }}
+                                onMouseOut={(e) => { if (!loading) { e.currentTarget.style.background = '#005cc1'; e.currentTarget.style.boxShadow = 'none' } }}
                             >
                                 {loading ? 'Validating Session...' : 'Launch Explorer →'}
                             </button>

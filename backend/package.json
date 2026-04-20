@@ -20,7 +20,12 @@
         "body-parser": "^1.20.2",
         "compromise": "^14.10.0",
         "cors": "^2.8.5",
+        "dotenv": "^17.4.2",
         "express": "^4.19.2",
-        "jsonwebtoken": "^9.0.3"
+        "groq-sdk": "^1.1.2",
+        "jsonwebtoken": "^9.0.3",
+        "multer": "^2.1.1",
+        "pdf2json": "^4.0.3",
+        "pdfjs-dist": "^5.6.205"
     }
 }

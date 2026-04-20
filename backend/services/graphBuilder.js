@@ -1,54 +1,47 @@
 const CaseGraph = require('../models/caseModel');
-const Edge = require('../models/edgeModel');
+const Edge      = require('../models/edgeModel');
 
-/**
- * Phase 2 – Enhanced Graph Builder
- *
- * Node types: claim, reasoning, precedent, conclusion
- * Edge types:
- *   claim       --> conclusion  : "supports"
- *   claim       --> reasoning   : "raises"
- *   reasoning   --> conclusion  : "leads_to"
- *   conclusion  --> precedent   : "cites"
- */
 class GraphBuilder {
     build(nodes) {
         const graph = new CaseGraph();
+        nodes.forEach(n => graph.addNode(n));
 
-        nodes.forEach(node => graph.addNode(node));
+        // Extract doc-order index from node id ("node-42" → 42)
+        const idx = n => parseInt(n.id.replace('node-', ''), 10) || 0;
 
-        const claims      = nodes.filter(n => n.type === 'claim');
-        const conclusions = nodes.filter(n => n.type === 'conclusion');
-        const precedents  = nodes.filter(n => n.type === 'precedent');
-        const reasonings  = nodes.filter(n => n.type === 'reasoning');
+        const byType = type => nodes.filter(n => n.type === type).sort((a, b) => idx(a) - idx(b));
 
-        // Claims → Conclusions (supports)
-        claims.forEach(claim => {
-            conclusions.forEach(conclusion => {
-                graph.addEdge(new Edge(claim.id, conclusion.id, 'supports'));
-            });
-        });
+        const claims      = byType('claim');
+        const reasonings  = byType('reasoning');
+        const conclusions = byType('conclusion');
+        const precedents  = byType('precedent');
 
-        // Claims → Reasoning (raises) [Phase 2 addition]
-        claims.forEach(claim => {
-            reasonings.forEach(reasoning => {
-                graph.addEdge(new Edge(claim.id, reasoning.id, 'raises'));
-            });
-        });
+        // Returns the single closest node in `targets` that appears AFTER `source`
+        // in the document. Falls back to the globally nearest if none follow.
+        const nearest = (source, targets) => {
+            const si = idx(source);
+            const after  = targets.filter(t => idx(t) > si);
+            const before = targets.filter(t => idx(t) < si);
+            if (after.length)  return after.reduce((a, b) => idx(a) - si < idx(b) - si ? a : b);
+            if (before.length) return before.reduce((a, b) => si - idx(a) < si - idx(b) ? a : b);
+            return null;
+        };
 
-        // Reasoning → Conclusions (leads_to) [Phase 2 addition]
-        reasonings.forEach(reasoning => {
-            conclusions.forEach(conclusion => {
-                graph.addEdge(new Edge(reasoning.id, conclusion.id, 'leads_to'));
-            });
-        });
+        const addOnce = (src, tgt, rel) => {
+            if (src && tgt) graph.addEdge(new Edge(src.id, tgt.id, rel));
+        };
 
-        // Conclusions → Precedents (cites)
-        conclusions.forEach(conclusion => {
-            precedents.forEach(precedent => {
-                graph.addEdge(new Edge(conclusion.id, precedent.id, 'cites'));
-            });
-        });
+        // claim → nearest reasoning (raises)
+        claims.forEach(c => addOnce(c, nearest(c, reasonings), 'raises'));
+
+        // claim → nearest conclusion (supports)
+        claims.forEach(c => addOnce(c, nearest(c, conclusions), 'supports'));
+
+        // reasoning → nearest conclusion (leads_to)
+        reasonings.forEach(r => addOnce(r, nearest(r, conclusions), 'leads_to'));
+
+        // conclusion → nearest precedent (cites)
+        conclusions.forEach(c => addOnce(c, nearest(c, precedents), 'cites'));
 
         return graph.toJSON();
     }
